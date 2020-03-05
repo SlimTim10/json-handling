@@ -17,22 +17,22 @@ import Data.Aeson
 assert :: FilePath -> Pet -> IO ()
 assert fp pet = do
   bs <- getJSON fp
-  case eitherDecode bs :: Either String PetJSON of
+  case check bs of
     Left error -> do
       putStrLn failMessage
-      print error
-    Right petJSON -> case mkPet petJSON of
-      Left error -> do
-        putStrLn failMessage
-        print error
-      Right p ->
-        if p == pet
-        then putStrLn passMessage
-        else putStrLn failMessage
+      putStrLn error
+    Right msg -> putStrLn msg
   where
     failMessage = "Test " ++ fp ++ " failed"
     passMessage = "Test " ++ fp ++ " passed"
-        
+    check :: B.ByteString -> Either String String
+    check bs = do
+      petJSON <- eitherDecode bs
+      p <- mkPet petJSON
+      if p == pet
+        then Right passMessage
+        else Left "Pets don't match"
+    
 main :: IO ()
 main = do
   assert "1.json" (Pet {name = "Nermal", species = Cat, colour = "grey", age = 3})
