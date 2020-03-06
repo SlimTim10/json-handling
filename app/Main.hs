@@ -1,7 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DeriveGeneric, DeriveAnyClass #-}
-{-# LANGUAGE DuplicateRecordFields, NamedFieldPuns #-}
-
 module Main where
 
 import Lib

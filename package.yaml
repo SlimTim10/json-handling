@@ -48,3 +48,10 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - json-handling
+
+default-extensions:
+  - OverloadedStrings
+  - DeriveGeneric
+  - DeriveAnyClass
+  - DuplicateRecordFields
+  - NamedFieldPuns

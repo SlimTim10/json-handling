@@ -1,12 +1,8 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DeriveGeneric, DeriveAnyClass #-}
-{-# LANGUAGE DuplicateRecordFields, NamedFieldPuns #-}
-
 module Lib
-    ( PetJSON(..), Pet(..), Species(..)
-    , mkPet
-    , getJSON
-    ) where
+  ( PetJSON(..), Pet(..), Species(..)
+  , mkPet
+  , getJSON
+  ) where
 
 import GHC.Generics
 import qualified Data.ByteString.Lazy as B
