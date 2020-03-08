@@ -1,7 +1,8 @@
 module Lib
   ( PetJSON(..), Pet(..), Species(..)
-  , mkPet
+  , readPet, readPets
   , getJSON
+  , mkPet
   ) where
 
 import GHC.Generics
@@ -15,6 +16,7 @@ import Data.Aeson
   , encode
   , (.:)
   )
+import Data.Either (partitionEithers)
 
 data Species = Cat | Lizard | Dog
   deriving (Show, Eq)
@@ -24,7 +26,7 @@ data PetJSON = PetJSON
   , species :: String
   , colour :: String
   , age :: Int
-  } deriving (Show, Generic, ToJSON, Eq)
+  } deriving (Show, Generic, FromJSON, ToJSON, Eq)
 
 data Pet = Pet
   { name :: String
@@ -51,19 +53,36 @@ mkPet PetJSON {name, species, colour, age}
         , age = age
         }
 
-instance FromJSON PetJSON where
-  parseJSON = withObject "Pet" $ \o -> do
-    name <- o .: "name"
-    species <- o .: "species"
-    colour <- o .: "colour"
-    age <- o .: "age"
-    -- let name = firstName ++ " " ++ lastName
-    return PetJSON
-      { name = name
-      , species = species
-      , colour = colour
-      , age = age
-      }
+-- instance FromJSON PetJSON where
+--   parseJSON = withObject "Pet" $ \o -> do
+--     name <- o .: "name"
+--     species <- o .: "species"
+--     colour <- o .: "colour"
+--     age <- o .: "age"
+--     -- let name = firstName ++ " " ++ lastName
+--     return PetJSON
+--       { name = name
+--       , species = species
+--       , colour = colour
+--       , age = age
+--       }
 
 getJSON :: FilePath -> IO B.ByteString
 getJSON = B.readFile
+
+readPet :: FilePath -> IO (Either String Pet)
+readPet fp = do
+  bs <- getJSON fp
+  return $ do
+    petJSON <- eitherDecode bs
+    mkPet petJSON
+
+readPets :: FilePath -> IO (Either String [Pet])
+readPets fp = do
+  bs <- getJSON fp
+  return $ do
+    petJSONs <- eitherDecode bs
+    let (errors, pets) = partitionEithers . map mkPet $ petJSONs
+    if length errors > 0
+      then Left $ show errors
+      else Right pets

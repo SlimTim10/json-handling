@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Nermal",
+    "species": "cat",
+    "colour": "grey",
+    "age": 3
+  },
+  {
+    "name": "Garfield",
+    "species": "cat",
+    "colour": "orange",
+    "age": 10
+  }
+]

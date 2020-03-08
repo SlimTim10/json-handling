@@ -1,25 +1,15 @@
 module Main where
 
 import Lib
-  ( PetJSON, Pet
-  , mkPet
-  , getJSON
-  )
-
-import GHC.Generics
-import qualified Data.ByteString.Lazy as B
-import Data.Aeson
-  ( eitherDecode
+  ( Pet(..), Species(..)
+  , readPet
   )
 
 main :: IO ()
 main = do
-  bs <- getJSON "1.json"
-  case eitherDecode bs :: Either String PetJSON of
-    Left error -> print error
-    Right petJSON -> case mkPet petJSON of
-      Left error -> print error
-      Right pet -> print pet
+  putStrLn "Single pet"
+  pet <- readPet "test/1.json"
+  print pet
 
 -- main :: IO ()
 -- main = do
