@@ -1,8 +1,7 @@
 module Lib
-  ( PetJSON(..), Pet(..), Species(..)
+  ( Pet(..), Species(..)
   , readPet, readPets
   , getJSON
-  , mkPet
   ) where
 
 import GHC.Generics
@@ -12,47 +11,30 @@ import Data.Aeson
   , ToJSON
   , parseJSON
   , withObject
+  , withText
   , eitherDecode
   , encode
   , (.:)
   )
-import Data.Either (partitionEithers)
 
 data Species = Cat | Lizard | Dog
-  deriving (Show, Eq)
+  deriving (Show, Eq, Generic, ToJSON)
 
-data PetJSON = PetJSON
-  { name :: String
-  , species :: String
-  , colour :: String
-  , age :: Int
-  } deriving (Show, Generic, FromJSON, ToJSON, Eq)
+instance FromJSON Species where
+  parseJSON = withText "Species" $ \text ->
+    case text of
+      "cat" -> return Cat
+      "lizard" -> return Lizard
+      "dog" -> return Dog
+      _ -> fail "invalid species"
 
 data Pet = Pet
   { name :: String
   , species :: Species
   , colour :: String
   , age :: Int
-  } deriving (Show, Eq)
-
-parseSpecies :: String -> Either String Species
-parseSpecies "cat" = Right Cat
-parseSpecies "lizard" = Right Lizard
-parseSpecies "dog" = Right Dog
-parseSpecies _ = Left "Invalid species"
-
-mkPet :: PetJSON -> Either String Pet
-mkPet PetJSON {name, species, colour, age}
-  | age < 0 = Left "Invalid age"
-  | otherwise = do
-      s <- parseSpecies species
-      return Pet
-        { name = name
-        , species = s
-        , colour = colour
-        , age = age
-        }
-
+  } deriving (Show, Generic, FromJSON, ToJSON, Eq)
+      
 -- instance FromJSON PetJSON where
 --   parseJSON = withObject "Pet" $ \o -> do
 --     name <- o .: "name"
@@ -73,16 +55,9 @@ getJSON = B.readFile
 readPet :: FilePath -> IO (Either String Pet)
 readPet fp = do
   bs <- getJSON fp
-  return $ do
-    petJSON <- eitherDecode bs
-    mkPet petJSON
+  return $ eitherDecode bs
 
 readPets :: FilePath -> IO (Either String [Pet])
 readPets fp = do
   bs <- getJSON fp
-  return $ do
-    petJSONs <- eitherDecode bs
-    let (errors, pets) = partitionEithers . map mkPet $ petJSONs
-    if length errors > 0
-      then Left $ show errors
-      else Right pets
+  return $ eitherDecode bs
