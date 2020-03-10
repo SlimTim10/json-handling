@@ -3,12 +3,20 @@
     "name": "Nermal",
     "species": "cat",
     "colour": "grey",
-    "age": 3
+    "dob": {
+      "year": 1979,
+      "month": 9,
+      "day": 3
+    }
   },
   {
     "name": "Garfield",
     "species": "cat",
     "colour": "orange",
-    "age": 10
+    "dob": {
+      "year": 1978,
+      "month": 6,
+      "day": 19
+    }
   }
 ]

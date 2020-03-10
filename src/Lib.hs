@@ -1,5 +1,5 @@
 module Lib
-  ( Pet(..), Species(..)
+  ( Pet(..), Species(..), DateOfBirth(..)
   , readPet, readPets
   , getJSON
   ) where
@@ -12,6 +12,7 @@ import Data.Aeson
   , parseJSON
   , withObject
   , withText
+  , withScientific
   , eitherDecode
   , encode
   , (.:)
@@ -28,12 +29,19 @@ instance FromJSON Species where
       "dog" -> return Dog
       _ -> fail "invalid species"
 
+data DateOfBirth = DateOfBirth
+  { year :: Int
+  , month :: Int
+  , day :: Int
+  }
+  deriving (Show, Eq, Generic, ToJSON, FromJSON)
+
 data Pet = Pet
   { name :: String
   , species :: Species
   , colour :: String
-  , age :: Int
-  } deriving (Show, Generic, FromJSON, ToJSON, Eq)
+  , dob :: DateOfBirth
+  } deriving (Show, Eq, Generic, ToJSON, FromJSON)
       
 -- instance FromJSON PetJSON where
 --   parseJSON = withObject "Pet" $ \o -> do
