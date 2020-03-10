@@ -1,6 +1,10 @@
+import Pet
+  ( Pet(..)
+  , Species(..)
+  , DateOfBirth(..)
+  )
 import Lib
-  ( Pet(..), Species(..), DateOfBirth(..)
-  , readPet, readPets
+  ( readJSON
   )
 import Assert
   ( assert
@@ -9,32 +13,32 @@ import Assert
 
 testSingle = do
   putStrLn "Single pet"
-  pet <- readPet "test/1.json"
+  pet <- readJSON "test/1.json"
   assertEither pet
     Pet
     { name = "Nermal"
     , species = Cat
     , colour = "grey"
-    , dob = DateOfBirth { year = 1979, month = 9, day = 3 }
+    , dob = DateOfBirth 1979 9 3
     }
 
 testMultiple = do
   putStrLn "Multiple pets"
-  pets <- readPets "test/2.json"
+  pets <- readJSON "test/2.json"
   assertEither pets
     [
       Pet
       { name = "Nermal"
       , species = Cat
       , colour = "grey"
-      , dob = DateOfBirth { year = 1979, month = 9, day = 3 }
+      , dob = DateOfBirth 1979 9 3
       }
     ,
       Pet
       { name = "Garfield"
       , species = Cat
       , colour = "orange"
-      , dob = DateOfBirth { year = 1978, month = 6, day = 19 }
+      , dob = DateOfBirth 1978 6 19
       }
     ]
 

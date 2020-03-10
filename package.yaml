@@ -1,7 +1,7 @@
 name:                json-handling
 version:             0.1.0.0
 github:              "SlimTim10/json-handling"
-license:             BSD3
+license:             MIT
 author:              "SlimTim10"
 maintainer:          "slimtim10@gmail.com"
 copyright:           "SlimTim10"
@@ -21,8 +21,8 @@ description:         Please see the README on GitHub at <https://github.com/Slim
 
 dependencies:
 - base >= 4.7 && < 5
-- aeson
-- bytestring
+- aeson >= 1.4.6.0 && < 1.5
+- bytestring >= 0.10.10.0 && < 0.11
 
 library:
   source-dirs: src
