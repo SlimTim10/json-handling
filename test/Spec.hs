@@ -1,8 +1,3 @@
-import Pet
-  ( Pet(..)
-  , Species(..)
-  , DateOfBirth(..)
-  )
 import Lib
   ( readJSON
   )
@@ -10,10 +5,18 @@ import Assert
   ( assert
   , assertEither
   )
+import Pet
+  ( Pet(..)
+  , Species(..)
+  , DateOfBirth(..)
+  )
+import Packet
+  ( Packet(..)
+  )
 
-testSingle = do
+testSinglePet = do
   putStrLn "Single pet"
-  pet <- readJSON "test/1.json"
+  pet <- readJSON "test/nermal.json"
   assertEither pet
     Pet
     { name = "Nermal"
@@ -22,9 +25,9 @@ testSingle = do
     , dob = DateOfBirth 1979 9 3
     }
 
-testMultiple = do
+testMultiplePets = do
   putStrLn "Multiple pets"
-  pets <- readJSON "test/2.json"
+  pets <- readJSON "test/cats.json"
   assertEither pets
     [
       Pet
@@ -42,7 +45,17 @@ testMultiple = do
       }
     ]
 
+testSinglePacket = do
+  putStrLn "Single packet"
+  pkt <- readJSON "test/packet.json"
+  assertEither pkt
+    Packet
+    { propAddress = 1
+    , payload = [3, 2, 1]
+    }
+
 main :: IO ()
 main = do
-  testSingle
-  testMultiple
+  testSinglePet
+  testMultiplePets
+  testSinglePacket
