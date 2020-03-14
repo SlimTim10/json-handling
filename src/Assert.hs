@@ -5,8 +5,8 @@ module Assert
 
 assert :: Eq a => a -> a -> IO ()
 assert a b
-  | a == b = putStrLn "Assertion passed\n"
-  | otherwise = putStrLn "Assertion failed\n"
+  | a == b = putStrLn "Assertion passed"
+  | otherwise = putStrLn "Assertion failed"
 
 assertEither :: Eq a => Either String a -> a -> IO ()
 assertEither (Left error) _ = putStrLn error
