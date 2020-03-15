@@ -85,14 +85,11 @@ testCreatePacket = do
 
 main :: IO ()
 main = do
-  testSinglePet
-  putStrLn ""
-  testMultiplePets
-  putStrLn ""
-  testSinglePacket
-  putStrLn ""
-  testValidPackets
-  putStrLn ""
-  testInvalidPackets
-  putStrLn ""
-  testCreatePacket
+  testSinglePet >> newline
+  testMultiplePets >> newline
+  testSinglePacket >> newline
+  testValidPackets >> newline
+  testInvalidPackets >> newline
+  testCreatePacket >> newline
+  where
+    newline = putStrLn ""
